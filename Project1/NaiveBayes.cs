@@ -43,25 +43,11 @@ namespace Project1
                     Gender = itemDetail[3].Trim()
                 };
                 personsWithAge.Add(newItem);
-                if (newItem.Gender == "M")
-                {
-                    maleCount++;
-                    heightWithMaleTotal += newItem.Height;
-                    weightWithMaleTotal += newItem.Weight;
-                    ageWithMaleTotal += newItem.Age;
-                }
-                else
-                {
-                    femaleCount++;
-                    heightWithFemaleTotal += newItem.Height;
-                    weightWithFemaleTotal += newItem.Weight;
-                    ageWithFemaleTotal += newItem.Age;
-                }
             }
             for (int i = 0; i < personsWithAge.Count; i++)
             {
                 var elementToBeTested = personsWithAge[i];
-                personsWithAge.RemoveAt(i);
+                //personsWithAge.RemoveAt(i);
                 double heightWithMaleMean = heightWithMaleTotal / maleCount;
                 double heightWithMale_SD = 0;
                 double heightWithFemaleMean = heightWithFemaleTotal / femaleCount;
@@ -77,8 +63,35 @@ namespace Project1
                 double ageWithMale_SD = 0;
                 double ageWithFemaleMean = ageWithFemaleTotal / femaleCount;
                 double ageWithFemale_SD = 0;
-                foreach (var item in personsWithAge)
+                for(int j = 0; j < personsWithAge.Count; j++)
                 {
+                    if(i == j)
+                    {
+                        continue;
+                    }
+                    var newItem = personsWithAge[j];
+                    if (newItem.Gender == "M")
+                    {
+                        maleCount++;
+                        heightWithMaleTotal += newItem.Height;
+                        weightWithMaleTotal += newItem.Weight;
+                        ageWithMaleTotal += newItem.Age;
+                    }
+                    else
+                    {
+                        femaleCount++;
+                        heightWithFemaleTotal += newItem.Height;
+                        weightWithFemaleTotal += newItem.Weight;
+                        ageWithFemaleTotal += newItem.Age;
+                    }
+                }
+                for (int j = 0; j < personsWithAge.Count; j++)
+                {
+                    if(i == j)
+                    {
+                        continue;
+                    }
+                    var item = personsWithAge[j];
                     if (item.Gender == "M")
                     {
                         heightWithMale_SD += Math.Pow(Math.Pow(item.Height - heightWithMaleMean, 2) / (maleCount - 1), 0.5); ;
@@ -122,12 +135,12 @@ namespace Project1
 
                 double finalTotalMale = probabilityMaleTotal / (probabilityMaleTotal + probabilityFemaleTotal);
                 double finalTotalFemale = probabilityFemaleTotal / (probabilityMaleTotal + probabilityFemaleTotal);
-                Console.WriteLine($"{finalTotalMale}//{finalTotalFemale}");
+                //Console.WriteLine($"{finalTotalMale}//{finalTotalFemale}");
 
                 if (finalTotalMale > finalTotalFemale)
                 {
-                    Console.WriteLine($"{i} 1a) Gender Prediction for Person with {elementToBeTested.Gender} using Gaussian Naive Bayes is M");
-                    Console.WriteLine($"One out Evaluation with Age used: {useAgeInCalculation}");
+                    //Console.WriteLine($"Naive Bayes {i} 1a) Gender Prediction for Person with {elementToBeTested.Gender} using Gaussian Naive Bayes is M");
+                    //Console.WriteLine($"One out Evaluation with Age used: {useAgeInCalculation}");
                     if (elementToBeTested.Gender == "M")
                     {
                         correctPrediction++;
@@ -139,8 +152,8 @@ namespace Project1
                 }
                 else
                 {
-                    Console.WriteLine($"{i} 1a) Gender Prediction for Person with {elementToBeTested.Gender} using Gaussian Naive Bayes is W");
-                    Console.WriteLine($"One out Evaluation with Age used: {useAgeInCalculation}");
+                    //Console.WriteLine($"Naive Bayes {i} 1a) Gender Prediction for Person with {elementToBeTested.Gender} using Gaussian Naive Bayes is W");
+                    //Console.WriteLine($"One out Evaluation with Age used: {useAgeInCalculation}");
                     if (elementToBeTested.Gender == "W")
                     {
                         correctPrediction++;
@@ -150,12 +163,12 @@ namespace Project1
                         falsePrediction++;
                     }
                 }
-                Console.WriteLine("--------------------------------------");
-                Console.WriteLine();
+                //Console.WriteLine("--------------------------------------");
+                //Console.WriteLine();
 
-                personsWithAge.Add(elementToBeTested);
+                //personsWithAge.Add(elementToBeTested);
             }
-            Console.WriteLine($"Correct: {correctPrediction} False {falsePrediction}");
+            Console.WriteLine($"Naive Bayes Correct: {correctPrediction} False {falsePrediction} Total Predictions{correctPrediction + falsePrediction} Age used {useAgeInCalculation}");
             Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXX");
         }
 

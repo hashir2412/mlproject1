@@ -14,7 +14,7 @@ namespace Project1
 
         public async Task GenerateDataAndPredict()
         {
-            await PredictData();
+            //await PredictData();
             Console.WriteLine("......................................");
             await PerformOneOutEvaluation(true);
             await PerformOneOutEvaluation(false);
@@ -24,6 +24,8 @@ namespace Project1
         {
             personsWithAge = new List<PersonWithAge>();
             string[] programData1c1d2c2d = await File.ReadAllLinesAsync("programData1c1d2c2d.txt");
+            int correctPrediction = 0;
+            int falsePrediction = 0;
             foreach (var item in programData1c1d2c2d)
             {
                 var itemDetail = item.Replace("(", "").Replace(")", "").Split(",");
@@ -39,28 +41,80 @@ namespace Project1
             for (int i = 0; i < personsWithAge.Count; i++)
             {
                 var elementToBeTested = personsWithAge[i];
-                personsWithAge.Remove(personsWithAge[i]);
                 List<DistanceFromPoint> distanceFromPoints = new List<DistanceFromPoint>();
-                foreach (var person in personsWithAge)
+                for (int j = 0; j < personsWithAge.Count; j++)
                 {
-                    var cartesianDistance = CalculateCartesianDistance(person, elementToBeTested, useAgeInCalculation);
+                    if (i == j)
+                    {
+                        continue;
+                    }
+                    var cartesianDistance = CalculateCartesianDistance(personsWithAge[j], elementToBeTested, useAgeInCalculation);
                     distanceFromPoints.Add(new DistanceFromPoint()
                     {
-                        Person = person,
+                        Person = personsWithAge[j],
                         CartesianDistance = cartesianDistance
                     });
                 }
                 var distanceSorted = distanceFromPoints.OrderBy(a => a.CartesianDistance).ToArray();
-                FinalResult(distanceSorted, 1, elementToBeTested, "Cartesian");
-                FinalResult(distanceSorted, 3, elementToBeTested, "Cartesian");
-                FinalResult(distanceSorted, 5, elementToBeTested, "Cartesian");
-                FinalResult(distanceSorted, 7, elementToBeTested, "Cartesian");
-                FinalResult(distanceSorted, 9, elementToBeTested, "Cartesian");
-                FinalResult(distanceSorted, 11, elementToBeTested, "Cartesian");
-                Console.WriteLine($"{i} Actual Value: {elementToBeTested.Gender} , One out Evaluation with Age used: {useAgeInCalculation}");
-                Console.WriteLine("------------------------------");
-                personsWithAge.Add(elementToBeTested);
+                var s = FinalResult(distanceSorted, 1, elementToBeTested, "Cartesian");
+                if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
+                {
+                    correctPrediction++;
+                }
+                else
+                {
+                    falsePrediction++;
+                }
+                s = FinalResult(distanceSorted, 3, elementToBeTested, "Cartesian");
+                if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
+                {
+                    correctPrediction++;
+                }
+                else
+                {
+                    falsePrediction++;
+                }
+                s = FinalResult(distanceSorted, 5, elementToBeTested, "Cartesian");
+                if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
+                {
+                    correctPrediction++;
+                }
+                else
+                {
+                    falsePrediction++;
+                }
+                s = FinalResult(distanceSorted, 7, elementToBeTested, "Cartesian");
+                if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
+                {
+                    correctPrediction++;
+                }
+                else
+                {
+                    falsePrediction++;
+                }
+                s = FinalResult(distanceSorted, 9, elementToBeTested, "Cartesian");
+                if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
+                {
+                    correctPrediction++;
+                }
+                else
+                {
+                    falsePrediction++;
+                }
+                s = FinalResult(distanceSorted, 11, elementToBeTested, "Cartesian");
+                if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
+                {
+                    correctPrediction++;
+                }
+                else
+                {
+                    falsePrediction++;
+                }
+                //Console.WriteLine($"KNN {i} Actual Value: {elementToBeTested.Gender} , One out Evaluation with Age used: {useAgeInCalculation}");
+
             }
+            Console.WriteLine($"KNN Correct Prediction {correctPrediction} False Prediction {falsePrediction} Total Predictions{correctPrediction + falsePrediction} Age used {useAgeInCalculation}");
+            Console.WriteLine("------------------------------");
         }
 
         async Task PredictData()
@@ -121,7 +175,7 @@ namespace Project1
 
         }
 
-        void FinalResult(DistanceFromPoint[] distanceFromPoints, int k, PersonWithAge p1, string matrixUsed)
+        bool FinalResult(DistanceFromPoint[] distanceFromPoints, int k, PersonWithAge p1, string matrixUsed)
         {
             var Mcount = 0;
             var FCount = 0;
@@ -138,11 +192,13 @@ namespace Project1
             }
             if (Mcount > FCount)
             {
-                Console.WriteLine($"1a) Gender Prediction for K = {k} for Person with {p1.Height}, {p1.Weight} and {p1.Age} using {matrixUsed} Distance is M");
+                //Console.WriteLine($"KNN 1a) Gender Prediction for K = {k} for Person with {p1.Height}, {p1.Weight} and {p1.Age} using {matrixUsed} Distance is M");
+                return true;
             }
             else
             {
-                Console.WriteLine($"1a) Gender Prediction for K = {k} for Person with {p1.Height}, {p1.Weight} and {p1.Age} using {matrixUsed} Distance is W");
+                //Console.WriteLine($"KNN 1a) Gender Prediction for K = {k} for Person with {p1.Height}, {p1.Weight} and {p1.Age} using {matrixUsed} Distance is W");
+                return false;
             }
         }
 
@@ -169,7 +225,7 @@ namespace Project1
             if (useAgeInCalculation)
             {
                 distance += Math.Pow(Math.Abs(p1.Age - p2.Age), 2);
-            }            
+            }
             distance = Math.Pow(distance, (double)1 / 2);
             return distance;
         }
