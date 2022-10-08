@@ -11,7 +11,9 @@ namespace Project1
         public async static Task Main(string[] args)
         {
             Knn knn = new Knn();
-            await knn.GenerateDataAndPredict();
+            //await knn.GenerateDataAndPredict();
+            NaiveBayes naiveBayes = new NaiveBayes();
+            await naiveBayes.GenerateDataAndPredict();
         }
 
 
