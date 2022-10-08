@@ -157,7 +157,7 @@ namespace Project1
             distance += Math.Pow(Math.Abs(p1.Height - p2.Height), 3);
             distance += Math.Pow(Math.Abs(p1.Weight - p2.Weight), 3);
             distance += Math.Pow(Math.Abs(p1.Age - p2.Age), 3);
-            distance = Math.Pow(distance, 1 / 3);
+            distance = Math.Pow(distance, (double)1 / 3);
             return distance;
         }
 
@@ -170,7 +170,7 @@ namespace Project1
             {
                 distance += Math.Pow(Math.Abs(p1.Age - p2.Age), 2);
             }            
-            distance = Math.Pow(distance, 1 / 2);
+            distance = Math.Pow(distance, (double)1 / 2);
             return distance;
         }
     }
