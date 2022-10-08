@@ -139,9 +139,9 @@ namespace Project1
                 }
                 else
                 {
-                    Console.WriteLine($"{i} 1a) Gender Prediction for Person with {elementToBeTested.Gender} using Gaussian Naive Bayes is F");
+                    Console.WriteLine($"{i} 1a) Gender Prediction for Person with {elementToBeTested.Gender} using Gaussian Naive Bayes is W");
                     Console.WriteLine($"One out Evaluation with Age used: {useAgeInCalculation}");
-                    if (elementToBeTested.Gender == "F")
+                    if (elementToBeTested.Gender == "W")
                     {
                         correctPrediction++;
                     }
@@ -156,6 +156,7 @@ namespace Project1
                 personsWithAge.Add(elementToBeTested);
             }
             Console.WriteLine($"Correct: {correctPrediction} False {falsePrediction}");
+            Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXX");
         }
 
         async Task PredictData()
@@ -267,7 +268,7 @@ namespace Project1
                 else
                 {
                     Console.WriteLine($"1a) Gender Prediction for Person with {newItem.Height}," +
-                        $" {newItem.Weight} and {newItem.Age} using Gaussian Naive Bayes is F");
+                        $" {newItem.Weight} and {newItem.Age} using Gaussian Naive Bayes is W");
                 }
                 Console.WriteLine("--------------------------------------");
                 Console.WriteLine();
