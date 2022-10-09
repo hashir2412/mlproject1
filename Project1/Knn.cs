@@ -14,7 +14,7 @@ namespace Project1
 
         public async Task GenerateDataAndPredict()
         {
-            //await PredictData();
+            await PredictData();
             Console.WriteLine("......................................");
             await PerformOneOutEvaluation(true);
             await PerformOneOutEvaluation(false);
@@ -192,12 +192,12 @@ namespace Project1
             }
             if (Mcount > FCount)
             {
-                //Console.WriteLine($"KNN 1a) Gender Prediction for K = {k} for Person with {p1.Height}, {p1.Weight} and {p1.Age} using {matrixUsed} Distance is M");
+                Console.WriteLine($"KNN 1a) Gender Prediction for K = {k} for Person with {p1.Height}, {p1.Weight} and {p1.Age} using {matrixUsed} Distance is M");
                 return true;
             }
             else
             {
-                //Console.WriteLine($"KNN 1a) Gender Prediction for K = {k} for Person with {p1.Height}, {p1.Weight} and {p1.Age} using {matrixUsed} Distance is W");
+                Console.WriteLine($"KNN 1a) Gender Prediction for K = {k} for Person with {p1.Height}, {p1.Weight} and {p1.Age} using {matrixUsed} Distance is W");
                 return false;
             }
         }

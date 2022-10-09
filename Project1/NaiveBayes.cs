@@ -11,7 +11,7 @@ namespace Project1
         public List<PersonWithAge> personsWithAge;
         public async Task GenerateDataAndPredict()
         {
-            //await PredictData();
+            await PredictData();
             Console.WriteLine("......................................");
             await PerformOneOutEvaluation(true);
             await PerformOneOutEvaluation(false);
