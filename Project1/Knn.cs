@@ -50,10 +50,56 @@ namespace Project1
                 };
                 personsWithAge.Add(newItem);
             }
+            
             for (int i = 0; i < personsWithAge.Count; i++)
             {
                 var elementToBeTested = personsWithAge[i];
                 List<DistanceFromPoint> distanceFromPoints = new List<DistanceFromPoint>();
+                double heightMax = double.MinValue;
+                double weightMax = double.MinValue;
+                double ageMax = double.MinValue;
+                double heightMin = double.MaxValue;
+                double weightMin = double.MaxValue;
+                double ageMin = double.MaxValue;
+                for(int j=0;j< personsWithAge.Count; j++)
+                {
+                    if(i == j)
+                    {
+                        continue;
+                    }
+                    if (personsWithAge[j].Age > ageMax)
+                    {
+                        ageMax = personsWithAge[j].Age;
+                    }
+                    if (personsWithAge[j].Age < ageMin)
+                    {
+                        ageMin = personsWithAge[j].Age;
+                    }
+
+                    if (personsWithAge[j].Height > heightMax)
+                    {
+                        heightMax = personsWithAge[j].Height;
+                    }
+                    if (personsWithAge[j].Height < heightMin)
+                    {
+                        heightMin = personsWithAge[j].Height;
+                    }
+
+                    if (personsWithAge[j].Weight > weightMax)
+                    {
+                        weightMax = personsWithAge[j].Weight;
+                    }
+                    if (personsWithAge[j].Weight < weightMin)
+                    {
+                        weightMin = personsWithAge[j].Weight;
+                    }
+                }
+                foreach (var item in personsWithAge)
+                {
+                    item.HeightNormalized = (item.Height - heightMin) / (heightMax - heightMin);
+                    item.WeightNormalized = (item.Weight - weightMin) / (weightMax - weightMin);
+                    item.AgeNormalized = (item.Age - ageMin) / (ageMax - ageMin);
+                }
                 for (int j = 0; j < personsWithAge.Count; j++)
                 {
                     if (i == j)
@@ -68,7 +114,7 @@ namespace Project1
                     });
                 }
                 var distanceSorted = distanceFromPoints.OrderBy(a => a.CartesianDistance).ToArray();
-                var s = FinalResultIsMale(distanceSorted, 1, elementToBeTested, "Cartesian");
+                var s = FinalResultIsMale(distanceSorted, 1, elementToBeTested, "Cartesian", true);
                 if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
                 {
                     k1CorrectPrediction++;
@@ -79,7 +125,7 @@ namespace Project1
                     k1FalsePrediction++;
                     falsePrediction++;
                 }
-                s = FinalResultIsMale(distanceSorted, 3, elementToBeTested, "Cartesian");
+                s = FinalResultIsMale(distanceSorted, 3, elementToBeTested, "Cartesian", true);
                 if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
                 {
                     k3CorrectPrediction++;
@@ -90,7 +136,7 @@ namespace Project1
                     falsePrediction++;
                     k3FalsePrediction++;
                 }
-                s = FinalResultIsMale(distanceSorted, 5, elementToBeTested, "Cartesian");
+                s = FinalResultIsMale(distanceSorted, 5, elementToBeTested, "Cartesian", true);
                 if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
                 {
                     k5CorrectPrediction++;
@@ -101,7 +147,7 @@ namespace Project1
                     k5FalsePrediction++;
                     falsePrediction++;
                 }
-                s = FinalResultIsMale(distanceSorted, 7, elementToBeTested, "Cartesian");
+                s = FinalResultIsMale(distanceSorted, 7, elementToBeTested, "Cartesian", true);
                 if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
                 {
                     k7CorrectPrediction++;
@@ -112,7 +158,7 @@ namespace Project1
                     k7FalsePrediction++;
                     falsePrediction++;
                 }
-                s = FinalResultIsMale(distanceSorted, 9, elementToBeTested, "Cartesian");
+                s = FinalResultIsMale(distanceSorted, 9, elementToBeTested, "Cartesian", true);
                 if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
                 {
                     k9CorrectPrediction++;
@@ -123,7 +169,7 @@ namespace Project1
                     k9FalsePrediction++;
                     falsePrediction++;
                 }
-                s = FinalResultIsMale(distanceSorted, 11, elementToBeTested, "Cartesian");
+                s = FinalResultIsMale(distanceSorted, 11, elementToBeTested, "Cartesian", true);
                 if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
                 {
                     k11CorrectPrediction++;
@@ -149,20 +195,9 @@ namespace Project1
 
         async Task PredictData()
         {
-            personsWithAge = new List<PersonWithAge>();
-            string[] trainingtData1a2a = await File.ReadAllLinesAsync("trainingtData1a2a.txt");
-            foreach (var item in trainingtData1a2a)
-            {
-                var itemDetail = item.Replace("(", "").Replace(")", "").Split(",");
-                var newItem = new PersonWithAge()
-                {
-                    Height = double.Parse(itemDetail[0].Trim()),
-                    Weight = double.Parse(itemDetail[1].Trim()),
-                    Age = int.Parse(itemDetail[2].Trim()),
-                    Gender = itemDetail[3].Trim()
-                };
-                personsWithAge.Add(newItem);
-            }
+            await ExtractDataFromTraining();
+            double heightMax, weightMax, ageMax, heightMin, weightMin, ageMin;
+            NormalizeData(out heightMax, out weightMax, out ageMax, out heightMin, out weightMin, out ageMin);
             Console.WriteLine();
             Console.WriteLine("Enter the respective selection");
             Console.WriteLine("Enter custom test data - 1");
@@ -193,12 +228,17 @@ namespace Project1
                     if (int.TryParse(Console.ReadLine(), out int x))
                     {
                         k = x;
-                        // Parse successful. value can be any integer
                     }
                 }
                 testData1a2a = await File.ReadAllLinesAsync("testData1a2a.txt");
             }
             Console.WriteLine();
+            CalculatePrediction(heightMax, weightMax, ageMax, heightMin, weightMin, ageMin, testData1a2a, k);
+
+        }
+
+        private void CalculatePrediction(double heightMax, double weightMax, double ageMax, double heightMin, double weightMin, double ageMin, string[] testData1a2a, int? k)
+        {
             foreach (var item in testData1a2a)
             {
                 List<DistanceFromPoint> distanceFromPoints = new List<DistanceFromPoint>();
@@ -207,8 +247,11 @@ namespace Project1
                 {
                     Height = double.Parse(itemDetail[0].Trim()),
                     Weight = double.Parse(itemDetail[1].Trim()),
-                    Age = int.Parse(itemDetail[2].Trim())
+                    Age = int.Parse(itemDetail[2].Trim()),
                 };
+                newItem.HeightNormalized = (newItem.Height - heightMin) / (heightMax - heightMin);
+                newItem.WeightNormalized = (newItem.Weight - weightMin) / (weightMax - weightMin);
+                newItem.AgeNormalized = (newItem.Age - ageMin) / (ageMax - ageMin);
                 foreach (var person in personsWithAge)
                 {
                     var manhattanDistance = CalculateManhattanDistance(person, newItem);
@@ -252,10 +295,46 @@ namespace Project1
                 }
 
             }
-
         }
 
-        bool FinalResultIsMale(DistanceFromPoint[] distanceFromPoints, int k, PersonWithAge p1, string matrixUsed)
+        private void NormalizeData(out double heightMax, out double weightMax, out double ageMax, out double heightMin, out double weightMin, out double ageMin)
+        {
+            double heightMean = personsWithAge.Average(person => person.Height);
+            double weightMean = personsWithAge.Average(person => person.Weight);
+            double ageMean = personsWithAge.Average(person => person.Age);
+            heightMax = personsWithAge.Max(person => person.Height);
+            weightMax = personsWithAge.Max(person => person.Weight);
+            ageMax = personsWithAge.Max(person => person.Age);
+            heightMin = personsWithAge.Min(person => person.Height);
+            weightMin = personsWithAge.Min(person => person.Weight);
+            ageMin = personsWithAge.Min(person => person.Age);
+            foreach (var person in personsWithAge)
+            {
+                person.HeightNormalized = (person.Height - heightMin) / (heightMax - heightMin);
+                person.WeightNormalized = (person.Weight - weightMin) / (weightMax - weightMin);
+                person.AgeNormalized = (person.Age - ageMin) / (ageMax - ageMin);
+            }
+        }
+
+        private async Task ExtractDataFromTraining()
+        {
+            personsWithAge = new List<PersonWithAge>();
+            string[] trainingtData1a2a = await File.ReadAllLinesAsync("trainingtData1a2a.txt");
+            foreach (var item in trainingtData1a2a)
+            {
+                var itemDetail = item.Replace("(", "").Replace(")", "").Split(",");
+                var newItem = new PersonWithAge()
+                {
+                    Height = double.Parse(itemDetail[0].Trim()),
+                    Weight = double.Parse(itemDetail[1].Trim()),
+                    Age = int.Parse(itemDetail[2].Trim()),
+                    Gender = itemDetail[3].Trim()
+                };
+                personsWithAge.Add(newItem);
+            }
+        }
+
+        bool FinalResultIsMale(DistanceFromPoint[] distanceFromPoints, int k, PersonWithAge p1, string matrixUsed, bool isOneOutEvaluation = false)
         {
             var Mcount = 0;
             var FCount = 0;
@@ -272,27 +351,34 @@ namespace Project1
             }
             if (Mcount > FCount)
             {
-                Console.WriteLine($"KNN 1a) Gender Prediction for K = {k} for Person with {p1.Height}, {p1.Weight} and {p1.Age} using {matrixUsed} Distance is M");
+                if (!isOneOutEvaluation)
+                {
+                    Console.WriteLine($"KNN 1a) Gender Prediction for K = {k} for Person with {p1.Height}, {p1.Weight} and {p1.Age} using {matrixUsed} Distance is M");
+                }
+
                 return true;
             }
             else
             {
-                Console.WriteLine($"KNN 1a) Gender Prediction for K = {k} for Person with {p1.Height}, {p1.Weight} and {p1.Age} using {matrixUsed} Distance is W");
+                if (!isOneOutEvaluation)
+                {
+                    Console.WriteLine($"KNN 1a) Gender Prediction for K = {k} for Person with {p1.Height}, {p1.Weight} and {p1.Age} using {matrixUsed} Distance is W");
+                }
                 return false;
             }
         }
 
         double CalculateManhattanDistance(PersonWithAge p1, PersonWithAge p2)
         {
-            return Math.Abs(p1.Age - p2.Age) + Math.Abs(p1.Height - p2.Height) + Math.Abs(p1.Weight - p2.Weight);
+            return Math.Abs(p1.AgeNormalized - p2.AgeNormalized) + Math.Abs(p1.HeightNormalized - p2.HeightNormalized) + Math.Abs(p1.WeightNormalized - p2.WeightNormalized);
         }
 
         double CalculateMinkowskiDistance(PersonWithAge p1, PersonWithAge p2)
         {
             double distance = 0;
-            distance += Math.Pow(Math.Abs(p1.Height - p2.Height), 3);
-            distance += Math.Pow(Math.Abs(p1.Weight - p2.Weight), 3);
-            distance += Math.Pow(Math.Abs(p1.Age - p2.Age), 3);
+            distance += Math.Pow(Math.Abs(p1.HeightNormalized - p2.HeightNormalized), 3);
+            distance += Math.Pow(Math.Abs(p1.WeightNormalized - p2.WeightNormalized), 3);
+            distance += Math.Pow(Math.Abs(p1.AgeNormalized - p2.AgeNormalized), 3);
             distance = Math.Pow(distance, (double)1 / 3);
             return distance;
         }
@@ -300,11 +386,11 @@ namespace Project1
         double CalculateCartesianDistance(PersonWithAge p1, PersonWithAge p2, bool useAgeInCalculation = true)
         {
             double distance = 0;
-            distance += Math.Pow(Math.Abs(p1.Height - p2.Height), 2);
-            distance += Math.Pow(Math.Abs(p1.Weight - p2.Weight), 2);
+            distance += Math.Pow(Math.Abs(p1.HeightNormalized - p2.HeightNormalized), 2);
+            distance += Math.Pow(Math.Abs(p1.WeightNormalized - p2.WeightNormalized), 2);
             if (useAgeInCalculation)
             {
-                distance += Math.Pow(Math.Abs(p1.Age - p2.Age), 2);
+                distance += Math.Pow(Math.Abs(p1.AgeNormalized - p2.AgeNormalized), 2);
             }
             distance = Math.Pow(distance, (double)1 / 2);
             return distance;

@@ -12,5 +12,9 @@ namespace Project1
 
         public string Gender { get; set; }
 
+        public double HeightNormalized { get; set; }
+
+        public double WeightNormalized { get; set; }
+
     }
 }

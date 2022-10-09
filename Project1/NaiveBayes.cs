@@ -120,16 +120,16 @@ namespace Project1
                 double probabilityFemaleTotal;
                 if (useAgeInCalculation)
                 {
-                    probabilityMaleTotal = probabilityOfHeightGivenMale + probabilityOfWeightGivenMale +
-                    probabilityOfAgeGivenMale + probabilityOfMale;
-                    probabilityFemaleTotal = probabilityOfHeightGivenFemale + probabilityOfWeightGivenFemale +
-                    probabilityOfAgeGivenFemale + probabilityOfFemale;
+                    probabilityMaleTotal = probabilityOfHeightGivenMale * probabilityOfWeightGivenMale *
+                    probabilityOfAgeGivenMale * probabilityOfMale;
+                    probabilityFemaleTotal = probabilityOfHeightGivenFemale * probabilityOfWeightGivenFemale *
+                    probabilityOfAgeGivenFemale * probabilityOfFemale;
                 }
                 else
                 {
-                    probabilityMaleTotal = probabilityOfHeightGivenMale + probabilityOfWeightGivenMale +
+                    probabilityMaleTotal = probabilityOfHeightGivenMale * probabilityOfWeightGivenMale *
                     probabilityOfMale;
-                    probabilityFemaleTotal = probabilityOfHeightGivenFemale + probabilityOfWeightGivenFemale +
+                    probabilityFemaleTotal = probabilityOfHeightGivenFemale * probabilityOfWeightGivenFemale *
                      probabilityOfFemale;
                 }
 
