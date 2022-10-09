@@ -24,6 +24,18 @@ namespace Project1
         {
             personsWithAge = new List<PersonWithAge>();
             string[] programData1c1d2c2d = await File.ReadAllLinesAsync("programData1c1d2c2d.txt");
+            int k1CorrectPrediction = 0;
+            int k1FalsePrediction = 0;
+            int k3CorrectPrediction = 0;
+            int k3FalsePrediction = 0;
+            int k5CorrectPrediction = 0;
+            int k5FalsePrediction = 0;
+            int k7CorrectPrediction = 0;
+            int k7FalsePrediction = 0;
+            int k9CorrectPrediction = 0;
+            int k9FalsePrediction = 0;
+            int k11CorrectPrediction = 0;
+            int k11FalsePrediction = 0;
             int correctPrediction = 0;
             int falsePrediction = 0;
             foreach (var item in programData1c1d2c2d)
@@ -56,63 +68,81 @@ namespace Project1
                     });
                 }
                 var distanceSorted = distanceFromPoints.OrderBy(a => a.CartesianDistance).ToArray();
-                var s = FinalResult(distanceSorted, 1, elementToBeTested, "Cartesian");
+                var s = FinalResultIsMale(distanceSorted, 1, elementToBeTested, "Cartesian");
                 if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
                 {
+                    k1CorrectPrediction++;
+                    correctPrediction++;
+                }
+                else
+                {
+                    k1FalsePrediction++;
+                    falsePrediction++;
+                }
+                s = FinalResultIsMale(distanceSorted, 3, elementToBeTested, "Cartesian");
+                if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
+                {
+                    k3CorrectPrediction++;
                     correctPrediction++;
                 }
                 else
                 {
                     falsePrediction++;
+                    k3FalsePrediction++;
                 }
-                s = FinalResult(distanceSorted, 3, elementToBeTested, "Cartesian");
+                s = FinalResultIsMale(distanceSorted, 5, elementToBeTested, "Cartesian");
                 if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
                 {
+                    k5CorrectPrediction++;
                     correctPrediction++;
                 }
                 else
                 {
+                    k5FalsePrediction++;
                     falsePrediction++;
                 }
-                s = FinalResult(distanceSorted, 5, elementToBeTested, "Cartesian");
+                s = FinalResultIsMale(distanceSorted, 7, elementToBeTested, "Cartesian");
                 if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
                 {
+                    k7CorrectPrediction++;
                     correctPrediction++;
                 }
                 else
                 {
+                    k7FalsePrediction++;
                     falsePrediction++;
                 }
-                s = FinalResult(distanceSorted, 7, elementToBeTested, "Cartesian");
+                s = FinalResultIsMale(distanceSorted, 9, elementToBeTested, "Cartesian");
                 if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
                 {
+                    k9CorrectPrediction++;
                     correctPrediction++;
                 }
                 else
                 {
+                    k9FalsePrediction++;
                     falsePrediction++;
                 }
-                s = FinalResult(distanceSorted, 9, elementToBeTested, "Cartesian");
+                s = FinalResultIsMale(distanceSorted, 11, elementToBeTested, "Cartesian");
                 if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
                 {
+                    k11CorrectPrediction++;
                     correctPrediction++;
                 }
                 else
                 {
-                    falsePrediction++;
-                }
-                s = FinalResult(distanceSorted, 11, elementToBeTested, "Cartesian");
-                if ((s && elementToBeTested.Gender == "M") || (!s && elementToBeTested.Gender == "W"))
-                {
-                    correctPrediction++;
-                }
-                else
-                {
+                    k11FalsePrediction++;
                     falsePrediction++;
                 }
                 //Console.WriteLine($"KNN {i} Actual Value: {elementToBeTested.Gender} , One out Evaluation with Age used: {useAgeInCalculation}");
 
             }
+            Console.WriteLine($"Accuracy of K =1 {(double)k1CorrectPrediction * 100 / (k1CorrectPrediction + k1FalsePrediction)}");
+            Console.WriteLine($"Accuracy of K =3 {(double)k3CorrectPrediction * 100 / (k3CorrectPrediction + k3FalsePrediction)}");
+            Console.WriteLine($"Accuracy of K =5 {(double)k5CorrectPrediction * 100 / (k5CorrectPrediction + k5FalsePrediction)}");
+            Console.WriteLine($"Accuracy of K =7 {(double)k7CorrectPrediction * 100 / (k7CorrectPrediction + k7FalsePrediction)}");
+            Console.WriteLine($"Accuracy of K =9 {(double)k9CorrectPrediction * 100 / (k9CorrectPrediction + k9FalsePrediction)}");
+            Console.WriteLine($"Accuracy of K =11 {(double)k11CorrectPrediction * 100 / (k11CorrectPrediction + k11FalsePrediction)}");
             Console.WriteLine($"KNN Correct Prediction {correctPrediction} False Prediction {falsePrediction} Total Predictions{correctPrediction + falsePrediction} Age used {useAgeInCalculation}");
             Console.WriteLine("------------------------------");
         }
@@ -146,6 +176,7 @@ namespace Project1
                 List<string> data = new List<string>();
                 do
                 {
+                    Console.WriteLine();
                     Console.WriteLine("Enter the test data in the desired format eg ( 1.62065758929, 59.376557437583, 32)");
                     var testData = Console.ReadLine();
                     data.Add(testData);
@@ -157,6 +188,7 @@ namespace Project1
             {
                 if (input.KeyChar == '2')
                 {
+                    Console.WriteLine();
                     Console.WriteLine("Enter the value for K");
                     if (int.TryParse(Console.ReadLine(), out int x))
                     {
@@ -166,6 +198,7 @@ namespace Project1
                 }
                 testData1a2a = await File.ReadAllLinesAsync("testData1a2a.txt");
             }
+            Console.WriteLine();
             foreach (var item in testData1a2a)
             {
                 List<DistanceFromPoint> distanceFromPoints = new List<DistanceFromPoint>();
@@ -192,28 +225,28 @@ namespace Project1
                 if (k == null)
                 {
                     var distanceSorted = distanceFromPoints.OrderBy(a => a.ManhattanDistance).ToArray();
-                    FinalResult(distanceSorted, 1, newItem, "Manhattan");
-                    FinalResult(distanceSorted, 3, newItem, "Manhattan");
-                    FinalResult(distanceSorted, 7, newItem, "Manhattan");
+                    FinalResultIsMale(distanceSorted, 1, newItem, "Manhattan");
+                    FinalResultIsMale(distanceSorted, 3, newItem, "Manhattan");
+                    FinalResultIsMale(distanceSorted, 7, newItem, "Manhattan");
                     distanceSorted = distanceFromPoints.OrderBy(a => a.MinkowskiDistance).ToArray();
-                    FinalResult(distanceSorted, 1, newItem, "Minkowski");
-                    FinalResult(distanceSorted, 3, newItem, "Minkowski");
-                    FinalResult(distanceSorted, 7, newItem, "Minkowski");
+                    FinalResultIsMale(distanceSorted, 1, newItem, "Minkowski");
+                    FinalResultIsMale(distanceSorted, 3, newItem, "Minkowski");
+                    FinalResultIsMale(distanceSorted, 7, newItem, "Minkowski");
                     distanceSorted = distanceFromPoints.OrderBy(a => a.CartesianDistance).ToArray();
-                    FinalResult(distanceSorted, 1, newItem, "Cartesian");
-                    FinalResult(distanceSorted, 3, newItem, "Cartesian");
-                    FinalResult(distanceSorted, 7, newItem, "Cartesian");
+                    FinalResultIsMale(distanceSorted, 1, newItem, "Cartesian");
+                    FinalResultIsMale(distanceSorted, 3, newItem, "Cartesian");
+                    FinalResultIsMale(distanceSorted, 7, newItem, "Cartesian");
                     Console.WriteLine("--------------------------------------");
                     Console.WriteLine();
                 }
                 else
                 {
                     var distanceSorted = distanceFromPoints.OrderBy(a => a.ManhattanDistance).ToArray();
-                    FinalResult(distanceSorted, k.Value, newItem, "Manhattan");
+                    FinalResultIsMale(distanceSorted, k.Value, newItem, "Manhattan");
                     distanceSorted = distanceFromPoints.OrderBy(a => a.MinkowskiDistance).ToArray();
-                    FinalResult(distanceSorted, k.Value, newItem, "Minkowski");
+                    FinalResultIsMale(distanceSorted, k.Value, newItem, "Minkowski");
                     distanceSorted = distanceFromPoints.OrderBy(a => a.CartesianDistance).ToArray();
-                    FinalResult(distanceSorted, k.Value, newItem, "Cartesian");
+                    FinalResultIsMale(distanceSorted, k.Value, newItem, "Cartesian");
                     Console.WriteLine("--------------------------------------");
                     Console.WriteLine();
                 }
@@ -222,7 +255,7 @@ namespace Project1
 
         }
 
-        bool FinalResult(DistanceFromPoint[] distanceFromPoints, int k, PersonWithAge p1, string matrixUsed)
+        bool FinalResultIsMale(DistanceFromPoint[] distanceFromPoints, int k, PersonWithAge p1, string matrixUsed)
         {
             var Mcount = 0;
             var FCount = 0;

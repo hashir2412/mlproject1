@@ -12,7 +12,7 @@ namespace Project1
         public async Task GenerateDataAndPredict()
         {
             await PredictData();
-            Console.WriteLine("......................................");
+            Console.WriteLine("X------------------------X--------------------------X");
             await PerformOneOutEvaluation(true);
             await PerformOneOutEvaluation(false);
         }
@@ -163,10 +163,6 @@ namespace Project1
                         falsePrediction++;
                     }
                 }
-                //Console.WriteLine("--------------------------------------");
-                //Console.WriteLine();
-
-                //personsWithAge.Add(elementToBeTested);
             }
             Console.WriteLine($"Naive Bayes Correct: {correctPrediction} False {falsePrediction} Total Predictions{correctPrediction + falsePrediction} Age used {useAgeInCalculation}");
             Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXX");
