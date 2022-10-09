@@ -15,7 +15,7 @@ namespace Project1
         public async Task GenerateDataAndPredict()
         {
             await PredictData();
-            Console.WriteLine("......................................");
+            Console.WriteLine("X------------------------X--------------------------X");
             await PerformOneOutEvaluation(true);
             await PerformOneOutEvaluation(false);
         }
@@ -133,7 +133,39 @@ namespace Project1
                 };
                 personsWithAge.Add(newItem);
             }
-            string[] testData1a2a = await File.ReadAllLinesAsync("testData1a2a.txt");
+            Console.WriteLine();
+            Console.WriteLine("Enter the respective selection");
+            Console.WriteLine("Enter custom test data - 1");
+            Console.WriteLine("Enter value K for KNN - 2");
+            Console.WriteLine("Run KNN on default mode - 3");
+            var input = Console.ReadKey();
+            string[] testData1a2a = null;
+            int? k = null;
+            if (input.KeyChar == '1')
+            {
+                List<string> data = new List<string>();
+                do
+                {
+                    Console.WriteLine("Enter the test data in the desired format eg ( 1.62065758929, 59.376557437583, 32)");
+                    var testData = Console.ReadLine();
+                    data.Add(testData);
+                    Console.WriteLine("Would you to like to continue? Press 1 else press any other key");
+                } while (Console.ReadKey().KeyChar == '1');
+                testData1a2a = data.ToArray();
+            }
+            else
+            {
+                if (input.KeyChar == '2')
+                {
+                    Console.WriteLine("Enter the value for K");
+                    if (int.TryParse(Console.ReadLine(), out int x))
+                    {
+                        k = x;
+                        // Parse successful. value can be any integer
+                    }
+                }
+                testData1a2a = await File.ReadAllLinesAsync("testData1a2a.txt");
+            }
             foreach (var item in testData1a2a)
             {
                 List<DistanceFromPoint> distanceFromPoints = new List<DistanceFromPoint>();
@@ -157,20 +189,35 @@ namespace Project1
                         CartesianDistance = cartesianDistance
                     });
                 }
-                var distanceSorted = distanceFromPoints.OrderBy(a => a.ManhattanDistance).ToArray();
-                FinalResult(distanceSorted, 1, newItem, "Manhattan");
-                FinalResult(distanceSorted, 3, newItem, "Manhattan");
-                FinalResult(distanceSorted, 7, newItem, "Manhattan");
-                distanceSorted = distanceFromPoints.OrderBy(a => a.MinkowskiDistance).ToArray();
-                FinalResult(distanceSorted, 1, newItem, "Minkowski");
-                FinalResult(distanceSorted, 3, newItem, "Minkowski");
-                FinalResult(distanceSorted, 7, newItem, "Minkowski");
-                distanceSorted = distanceFromPoints.OrderBy(a => a.CartesianDistance).ToArray();
-                FinalResult(distanceSorted, 1, newItem, "Cartesian");
-                FinalResult(distanceSorted, 3, newItem, "Cartesian");
-                FinalResult(distanceSorted, 7, newItem, "Cartesian");
-                Console.WriteLine("--------------------------------------");
-                Console.WriteLine();
+                if (k == null)
+                {
+                    var distanceSorted = distanceFromPoints.OrderBy(a => a.ManhattanDistance).ToArray();
+                    FinalResult(distanceSorted, 1, newItem, "Manhattan");
+                    FinalResult(distanceSorted, 3, newItem, "Manhattan");
+                    FinalResult(distanceSorted, 7, newItem, "Manhattan");
+                    distanceSorted = distanceFromPoints.OrderBy(a => a.MinkowskiDistance).ToArray();
+                    FinalResult(distanceSorted, 1, newItem, "Minkowski");
+                    FinalResult(distanceSorted, 3, newItem, "Minkowski");
+                    FinalResult(distanceSorted, 7, newItem, "Minkowski");
+                    distanceSorted = distanceFromPoints.OrderBy(a => a.CartesianDistance).ToArray();
+                    FinalResult(distanceSorted, 1, newItem, "Cartesian");
+                    FinalResult(distanceSorted, 3, newItem, "Cartesian");
+                    FinalResult(distanceSorted, 7, newItem, "Cartesian");
+                    Console.WriteLine("--------------------------------------");
+                    Console.WriteLine();
+                }
+                else
+                {
+                    var distanceSorted = distanceFromPoints.OrderBy(a => a.ManhattanDistance).ToArray();
+                    FinalResult(distanceSorted, k.Value, newItem, "Manhattan");
+                    distanceSorted = distanceFromPoints.OrderBy(a => a.MinkowskiDistance).ToArray();
+                    FinalResult(distanceSorted, k.Value, newItem, "Minkowski");
+                    distanceSorted = distanceFromPoints.OrderBy(a => a.CartesianDistance).ToArray();
+                    FinalResult(distanceSorted, k.Value, newItem, "Cartesian");
+                    Console.WriteLine("--------------------------------------");
+                    Console.WriteLine();
+                }
+
             }
 
         }
