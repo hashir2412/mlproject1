@@ -63,9 +63,9 @@ namespace Project1
                 double ageWithMale_SD = 0;
                 double ageWithFemaleMean = ageWithFemaleTotal / femaleCount;
                 double ageWithFemale_SD = 0;
-                for(int j = 0; j < personsWithAge.Count; j++)
+                for (int j = 0; j < personsWithAge.Count; j++)
                 {
-                    if(i == j)
+                    if (i == j)
                     {
                         continue;
                     }
@@ -87,7 +87,7 @@ namespace Project1
                 }
                 for (int j = 0; j < personsWithAge.Count; j++)
                 {
-                    if(i == j)
+                    if (i == j)
                     {
                         continue;
                     }
@@ -164,7 +164,7 @@ namespace Project1
                     }
                 }
             }
-            Console.WriteLine($"Naive Bayes {(double)correctPrediction/(correctPrediction + falsePrediction)} Age used {useAgeInCalculation}");
+            Console.WriteLine($"Naive Bayes Accuracy for one out evaluation with Age used {useAgeInCalculation} is {(double)correctPrediction * 100 / (correctPrediction + falsePrediction)}%");
             Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXX");
         }
 

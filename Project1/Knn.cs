@@ -183,13 +183,13 @@ namespace Project1
                 //Console.WriteLine($"KNN {i} Actual Value: {elementToBeTested.Gender} , One out Evaluation with Age used: {useAgeInCalculation}");
 
             }
-            Console.WriteLine($"Accuracy of K =1 {(double)k1CorrectPrediction * 100 / (k1CorrectPrediction + k1FalsePrediction)}");
-            Console.WriteLine($"Accuracy of K =3 {(double)k3CorrectPrediction * 100 / (k3CorrectPrediction + k3FalsePrediction)}");
-            Console.WriteLine($"Accuracy of K =5 {(double)k5CorrectPrediction * 100 / (k5CorrectPrediction + k5FalsePrediction)}");
-            Console.WriteLine($"Accuracy of K =7 {(double)k7CorrectPrediction * 100 / (k7CorrectPrediction + k7FalsePrediction)}");
-            Console.WriteLine($"Accuracy of K =9 {(double)k9CorrectPrediction * 100 / (k9CorrectPrediction + k9FalsePrediction)}");
-            Console.WriteLine($"Accuracy of K =11 {(double)k11CorrectPrediction * 100 / (k11CorrectPrediction + k11FalsePrediction)}");
-            Console.WriteLine($"For Age used in calculation {useAgeInCalculation} KNN Total Accuracy {(double)correctPrediction * 100 / (correctPrediction + falsePrediction)}");
+            Console.WriteLine($"Accuracy of K =1 {(double)k1CorrectPrediction * 100 / (k1CorrectPrediction + k1FalsePrediction)} %");
+            Console.WriteLine($"Accuracy of K =3 {(double)k3CorrectPrediction * 100 / (k3CorrectPrediction + k3FalsePrediction)} %");
+            Console.WriteLine($"Accuracy of K =5 {(double)k5CorrectPrediction * 100 / (k5CorrectPrediction + k5FalsePrediction)} %");
+            Console.WriteLine($"Accuracy of K =7 {(double)k7CorrectPrediction * 100 / (k7CorrectPrediction + k7FalsePrediction)} %");
+            Console.WriteLine($"Accuracy of K =9 {(double)k9CorrectPrediction * 100 / (k9CorrectPrediction + k9FalsePrediction)} %");
+            Console.WriteLine($"Accuracy of K =11 {(double)k11CorrectPrediction * 100 / (k11CorrectPrediction + k11FalsePrediction)} %");
+            Console.WriteLine($"For Age used in calculation {useAgeInCalculation} KNN Total Accuracy {(double)correctPrediction * 100 / (correctPrediction + falsePrediction)}%");
             Console.WriteLine("------------------------------");
         }
 
