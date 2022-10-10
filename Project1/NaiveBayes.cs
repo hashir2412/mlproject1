@@ -164,7 +164,7 @@ namespace Project1
                     }
                 }
             }
-            Console.WriteLine($"Naive Bayes Correct: {correctPrediction} False {falsePrediction} Total Predictions{correctPrediction + falsePrediction} Age used {useAgeInCalculation}");
+            Console.WriteLine($"Naive Bayes {(double)correctPrediction/(correctPrediction + falsePrediction)} Age used {useAgeInCalculation}");
             Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXX");
         }
 
@@ -267,7 +267,7 @@ namespace Project1
 
                 double finalTotalMale = probabilityMaleTotal / (probabilityMaleTotal + probabilityFemaleTotal);
                 double finalTotalFemale = 1 - finalTotalMale;
-                Console.WriteLine($"{finalTotalMale}//{finalTotalFemale}");
+                //Console.WriteLine($"{finalTotalMale}//{finalTotalFemale}");
 
                 if (finalTotalMale > finalTotalFemale)
                 {

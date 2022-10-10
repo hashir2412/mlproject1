@@ -50,7 +50,7 @@ namespace Project1
                 };
                 personsWithAge.Add(newItem);
             }
-            
+
             for (int i = 0; i < personsWithAge.Count; i++)
             {
                 var elementToBeTested = personsWithAge[i];
@@ -61,9 +61,9 @@ namespace Project1
                 double heightMin = double.MaxValue;
                 double weightMin = double.MaxValue;
                 double ageMin = double.MaxValue;
-                for(int j=0;j< personsWithAge.Count; j++)
+                for (int j = 0; j < personsWithAge.Count; j++)
                 {
-                    if(i == j)
+                    if (i == j)
                     {
                         continue;
                     }
@@ -189,7 +189,7 @@ namespace Project1
             Console.WriteLine($"Accuracy of K =7 {(double)k7CorrectPrediction * 100 / (k7CorrectPrediction + k7FalsePrediction)}");
             Console.WriteLine($"Accuracy of K =9 {(double)k9CorrectPrediction * 100 / (k9CorrectPrediction + k9FalsePrediction)}");
             Console.WriteLine($"Accuracy of K =11 {(double)k11CorrectPrediction * 100 / (k11CorrectPrediction + k11FalsePrediction)}");
-            Console.WriteLine($"KNN Correct Prediction {correctPrediction} False Prediction {falsePrediction} Total Predictions{correctPrediction + falsePrediction} Age used {useAgeInCalculation}");
+            Console.WriteLine($"For Age used in calculation {useAgeInCalculation} KNN Total Accuracy {(double)correctPrediction * 100 / (correctPrediction + falsePrediction)}");
             Console.WriteLine("------------------------------");
         }
 
@@ -299,9 +299,6 @@ namespace Project1
 
         private void NormalizeData(out double heightMax, out double weightMax, out double ageMax, out double heightMin, out double weightMin, out double ageMin)
         {
-            double heightMean = personsWithAge.Average(person => person.Height);
-            double weightMean = personsWithAge.Average(person => person.Weight);
-            double ageMean = personsWithAge.Average(person => person.Age);
             heightMax = personsWithAge.Max(person => person.Height);
             weightMax = personsWithAge.Max(person => person.Weight);
             ageMax = personsWithAge.Max(person => person.Age);
@@ -340,6 +337,7 @@ namespace Project1
             var FCount = 0;
             for (int i = 0; i < k; i++)
             {
+
                 if (distanceFromPoints[i].Person.Gender == "M")
                 {
                     Mcount++;
@@ -353,18 +351,42 @@ namespace Project1
             {
                 if (!isOneOutEvaluation)
                 {
-                    Console.WriteLine($"KNN 1a) Gender Prediction for K = {k} for Person with {p1.Height}, {p1.Weight} and {p1.Age} using {matrixUsed} Distance is M");
+                    Console.WriteLine($"For K = {k}:");
+                    PrintNeighbors(distanceFromPoints, k, matrixUsed);
+                    Console.WriteLine($"KNN 1a) Gender Prediction for Person with {p1.Height}, {p1.Weight} and {p1.Age} using {matrixUsed} Distance is M");
                 }
-
                 return true;
             }
             else
             {
                 if (!isOneOutEvaluation)
                 {
+                    Console.WriteLine($"For K = {k}:");
+                    PrintNeighbors(distanceFromPoints, k, matrixUsed);
                     Console.WriteLine($"KNN 1a) Gender Prediction for K = {k} for Person with {p1.Height}, {p1.Weight} and {p1.Age} using {matrixUsed} Distance is W");
                 }
                 return false;
+            }
+        }
+
+        private static void PrintNeighbors(DistanceFromPoint[] distanceFromPoints, int k, string matrixUsed)
+        {
+            Console.WriteLine("Neighbors:");
+            for (int i = 0; i < k; i++)
+            {
+                if (matrixUsed == "Manhattan")
+                {
+                    Console.WriteLine($"{matrixUsed} Distance : {distanceFromPoints[i].ManhattanDistance} ");
+                }
+                else if (matrixUsed == "Minkowski")
+                {
+                    Console.WriteLine($"{matrixUsed} Distance : {distanceFromPoints[i].MinkowskiDistance} ");
+                }
+                else
+                {
+                    Console.WriteLine($"{matrixUsed} Distance : {distanceFromPoints[i].CartesianDistance} ");
+                }
+                Console.WriteLine($"Neighbor {i + 1}: {distanceFromPoints[i].Person.Height}, {distanceFromPoints[i].Person.Weight} and {distanceFromPoints[i].Person.Gender}. ");
             }
         }
 
